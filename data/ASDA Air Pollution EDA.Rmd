@@ -1,0 +1,527 @@
+---
+title: "ASDA Air Pollution EDA"
+author: "Zitong LUO 2020011811"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Load Dataset
+
+```{r}
+library(GGally)
+library(corrgram)
+```
+
+```{r}
+air = read.csv("global air pollution dataset.csv")
+colnames(air) = c("Country","City","AQI","AQI.Cat","CO","CO.Cat","Ozone","Ozone.Cat","NO2","NO2.Cat","PM2.5","PM2.5.Cat")
+air$AQI.Cat <- factor(air$AQI.Cat, levels = c("Good", "Moderate", "Unhealthy for Sensitive Groups", "Unhealthy", "Very Unhealthy", "Hazardous"), labels = c(1:6))
+```
+
+# Factor Insights
+
+```{r}
+ggpairs(air,columns = c("AQI","CO","Ozone","NO2","PM2.5")) +
+  theme(aspect.ratio=1, axis.text = element_blank(), axis.ticks = element_blank())
+```
+
+```{r, fig.height= 8, fig.width= 8}
+corrgram(air[,c("AQI","CO","Ozone","NO2","PM2.5")], col.regions = colorRampPalette(c("#fbcf52", "#fde7a9", "white","#80b899","#007032")), lower.panel=panel.shade, upper.panel=panel.pie)
+```
+
+```{r, fig.height= 3, fig.width= 5}
+# library
+library(ggridges)
+library(ggplot2)
+library(viridis)
+library(hrbrthemes)
+
+# Plot
+color_palette <- c("#468358", "#559f55", "#83c46e","#d3c691","#c8af41","#be9a00")
+p = ggplot(air, aes(x = `CO`, y = `AQI.Cat`, fill = ..x..)) +
+  geom_density_ridges_gradient(scale = 3, rel_min_height = 0.01) +
+  xlim(0,30) +
+  xlab(NULL) +
+  ylab(NULL) +
+  #scale_fill_viridis(option = "D", direction = 1, begin=0.6, alpha = 0.8) +
+  scale_fill_gradientn(colors = color_palette) +
+  #labs(title = 'CO AQI Value In Each Overall AQI categories') +
+  theme(
+      legend.position="none",
+      panel.grid.major = element_line(size = 0.3, color = "#e3e4dd"),
+      panel.grid.minor = element_line(size = 0.3),
+      panel.grid.minor.x = element_blank(),
+      panel.grid.major.x = element_blank(),
+      panel.grid.minor.y = element_blank(),
+      panel.border = element_blank(),
+      axis.line = element_blank(),
+      panel.background = element_rect(fill='transparent'),
+      plot.background = element_rect(fill='transparent', color=NA),
+      plot.title = element_text(size = 10),
+      axis.text = element_text(size = 20)
+    )
+p
+
+ggsave('CO-AQI.Cat.png', p, bg='transparent', width = 10, height =6)
+```
+
+```{r, fig.height= 3, fig.width= 5}
+# Plot
+p = ggplot(air, aes(x = `Ozone`, y = `AQI.Cat`, fill = ..x..)) +
+  geom_density_ridges_gradient(scale = 3, rel_min_height = 0.01) +
+  #xlim(0,30) +
+  xlab(NULL) +
+  ylab(NULL) +
+ #scale_fill_viridis(option = "D", direction = 1, begin=0.6, alpha = 0.8) +
+  scale_fill_gradientn(colors = color_palette) +
+  #labs(title = 'CO AQI Value In Each Overall AQI categories') +
+  theme(
+      legend.position="none",
+      panel.grid.major = element_line(size = 0.3, color = "#e3e4dd"),
+      panel.grid.minor = element_line(size = 0.3),
+      panel.grid.minor.x = element_blank(),
+      panel.grid.major.x = element_blank(),
+      panel.grid.minor.y = element_blank(),
+      panel.border = element_blank(),
+      axis.line = element_blank(),
+      panel.background = element_rect(fill='transparent'),
+      plot.background = element_rect(fill='transparent', color=NA),
+      plot.title = element_text(size = 10),
+      axis.text = element_text(size = 20)
+    )
+p
+
+ggsave('Ozone-AQI.Cat.png', p, bg='transparent', width = 10, height =6)
+```
+
+```{r, fig.height= 3, fig.width= 5}
+# Plot
+p = ggplot(air, aes(x = `NO2`, y = `AQI.Cat`, fill = ..x..)) +
+  geom_density_ridges_gradient(scale = 3, rel_min_height = 0.01) +
+  #xlim(0,30) +
+  xlab(NULL) +
+  ylab(NULL) +
+  #scale_fill_viridis(option = "D", direction = 1, begin=0.6, alpha = 0.8) +
+  scale_fill_gradientn(colors = color_palette) +
+  #labs(title = 'CO AQI Value In Each Overall AQI categories') +
+  theme(
+      legend.position="none",
+      panel.grid.major = element_line(size = 0.3, color = "#e3e4dd"),
+      panel.grid.minor = element_line(size = 0.3),
+      panel.grid.minor.x = element_blank(),
+      panel.grid.major.x = element_blank(),
+      panel.grid.minor.y = element_blank(),
+      panel.border = element_blank(),
+      axis.line = element_blank(),
+      panel.background = element_rect(fill='transparent'),
+      plot.background = element_rect(fill='transparent', color=NA),
+      plot.title = element_text(size = 10),
+      axis.text = element_text(size = 20)
+    )
+p
+
+ggsave('NO2-AQI.Cat.png', p, bg='transparent', width = 10, height =6)
+```
+
+```{r, fig.height= 3, fig.width= 5}
+# Plot
+p = ggplot(air, aes(x = `PM2.5`, y = `AQI.Cat`, fill = ..x..)) +
+  geom_density_ridges_gradient(scale = 3, rel_min_height = 0.01) +
+  #xlim(0,30) +
+  xlab(NULL) +
+  ylab(NULL) +
+  #scale_fill_viridis(option = "D", direction = 1, begin=0.6, alpha = 0.8) +
+  scale_fill_gradientn(colors = color_palette) +
+  #labs(title = 'CO AQI Value In Each Overall AQI categories') +
+  theme(
+      legend.position="none",
+      panel.grid.major = element_line(size = 0.3, color = "#e3e4dd"),
+      panel.grid.minor = element_line(size = 0.3),
+      panel.grid.minor.x = element_blank(),
+      panel.grid.major.x = element_blank(),
+      panel.grid.minor.y = element_blank(),
+      panel.border = element_blank(),
+      axis.line = element_blank(),
+      panel.background = element_rect(fill='transparent'),
+      plot.background = element_rect(fill='transparent', color=NA),
+      plot.title = element_text(size = 10),
+      axis.text = element_text(size = 20)
+    )
+p
+
+ggsave('PM2.5-AQI.Cat.png', p, bg='transparent', width = 10, height =6)
+```
+
+# Clustering
+
+```{r, fig.height= 5, fig.width= 5}
+library(stats)
+scaled_data <- scale(air[,c("CO","Ozone","NO2","PM2.5")])
+wss <- numeric(10)
+for (k in 1:10) {
+  kmeans_model <- kmeans(scaled_data, centers = k)
+  wss[k] <- kmeans_model$tot.withinss
+}
+
+seq = c(1:10)
+
+#plot(1:10, wss, type = "b", xlab = "Number of Clusters", ylab = "Within-cluster Sum of Squares")
+
+p = ggplot( ,aes(x=seq, y=wss)) +
+    geom_line(color = "#468358",size = 1.5) +
+    geom_area(fill = "#7ab083") +
+    geom_point(color = "#559f55",size = 2.5) +
+    scale_x_continuous(breaks = seq(1,10,2), expand = c(0, 0)) +
+    scale_y_continuous(expand = c(0, 0)) +
+    xlab(NULL) +
+    ylab(NULL) +
+    theme(
+      legend.position="none",
+      panel.grid.major = element_line(size = 0.3, color = "#e3e4dd"),
+      panel.grid.minor = element_line(size = 0.3),
+      panel.grid.minor.x = element_blank(),
+      panel.grid.major.x = element_blank(),
+      panel.grid.minor.y = element_blank(),
+      axis.line = element_line(color = "#e3e4dd", size = 0.5),
+      panel.background = element_rect(fill='transparent'),
+      plot.background = element_rect(fill='transparent', color=NA),
+      plot.title = element_text(size = 10),
+      axis.text = element_text(size = 18)
+    )
+p
+
+ggsave('Elbow.png', p, bg='transparent', width = 8, height =7)
+```
+
+```{r}
+kmeans_model <- kmeans(scaled_data, centers = 3)
+
+# Cluster centers
+cluster_centers <- kmeans_model$centers
+
+# Cluster assignments for each observation
+cluster_assignments <- kmeans_model$cluster
+
+# Within-cluster sum of squares
+within_cluster_ss <- kmeans_model$tot.withinss
+
+# Size of each cluster
+cluster_sizes <- table(kmeans_model$cluster)
+```
+
+```{r}
+# Assuming you have performed K-means clustering and have the 'kmeans_model' object
+
+# Load the 'cluster' package
+library(cluster)
+
+# Compute the silhouette coefficients
+silhouette_vals <- silhouette(kmeans_model$cluster, dist(scaled_data))
+
+# Calculate the average silhouette width
+avg_silhouette_width <- mean(silhouette_vals[, "sil_width"])
+
+# Print the average silhouette width
+cat("Average Silhouette Width:", avg_silhouette_width, "\n")
+
+png("Silhouette.png", bg = "transparent")
+
+# Plot the silhouette plot
+plot(silhouette_vals, col = "#7ab083", border = NA, bg = "transparent", main = "Silhouette Plot")
+
+# Add a vertical line for average silhouette width
+abline(v = avg_silhouette_width, lty = 2)
+
+# Add cluster labels to the plot
+clus_labels <- as.character(kmeans_model$cluster)
+text(-0.15, 1:nrow(scaled_data), clus_labels, pos = 4, cex = 0.7)
+
+dev.off()
+```
+
+```{r}
+# Specify the range of cluster numbers to evaluate
+k_values <- 2:10
+
+# Create an empty vector to store average silhouette widths
+avg_silhouette_widths <- numeric(length(k_values))
+
+# Iterate over different cluster numbers
+for (i in 1:length(k_values)) {
+  k <- k_values[i]
+  
+  # Perform K-means clustering
+  kmeans_model <- kmeans(scaled_data, centers = k)
+  
+  # Compute the silhouette coefficients
+  silhouette_vals <- silhouette(kmeans_model$cluster, dist(scaled_data))
+  
+  # Calculate the average silhouette width
+  avg_silhouette_widths[i] <- mean(silhouette_vals[, "sil_width"])
+}
+
+```
+
+```{r}
+# Create a data frame for the plot
+silhouette_df <- data.frame(Clusters = k_values, AvgSilWidth = avg_silhouette_widths)
+
+# Plot the silhouette scores
+p = ggplot(silhouette_df, aes(x = Clusters, y = AvgSilWidth)) +
+  geom_line(color = "#468358",size = 1.5) +
+  geom_point(color = "#559f55",size = 2.5) +
+  xlab("Number of Clusters") +
+  ylab("Average Silhouette Width") +
+  ggtitle("Silhouette Scores for Different Numbers of Clusters") +
+  theme(
+      legend.position="none",
+      panel.grid.major = element_line(size = 0.3, color = "#e3e4dd"),
+      panel.grid.minor = element_line(size = 0.3),
+      panel.grid.minor.x = element_blank(),
+      panel.grid.major.x = element_blank(),
+      panel.grid.minor.y = element_blank(),
+      axis.line = element_line(color = "#e3e4dd", size = 0.5),
+      panel.background = element_rect(fill='transparent'),
+      plot.background = element_rect(fill='transparent', color=NA),
+      axis.text = element_text(size = 18)
+    )
+
+p
+
+ggsave('Silhouette Score.png', p, bg='transparent', width = 8, height =3)
+```
+
+# Regression
+
+```{r}
+hist(air$PM2.5)
+```
+
+```{r}
+reg = lm(PM2.5~Ozone+NO2+CO,air)
+summary(reg)
+```
+
+```{r}
+library(MASS)
+loglike <- boxcox((PM2.5+1)~Ozone+NO2+CO, data = air, lambda = seq(0.05, 0.15, length = 10))
+loglike$x[which.max(loglike$y)]
+```
+
+```{r}
+png("boxcox_plot.png", bg = "transparent")
+
+boxcox((PM2.5+1)~Ozone+NO2+CO, data = air, lambda = seq(0.05, 0.15, length = 10))
+
+dev.off()
+```
+
+```{r}
+air$tr_PM2.5 = (air$PM2.5+1)^0.1
+reg1 = lm(tr_PM2.5~Ozone+NO2+CO,air)
+summary(reg1)
+knitr::kable(summary(reg1)$coefficients)
+```
+
+```{r}
+library(car)
+crPlots(reg1)
+```
+
+```{r}
+plot(reg1)
+```
+
+```{r}
+plot(reg1$fitted.values,reg1$residuals,col="#598f69",pch=16 , cex=1.3)
+lines(lowess(reg1$fitted.values,reg1$residuals), col = "#c8af41")
+abline(h=0, lty = 2, col = "#d3c691")
+
+png("residuals-fitted_value.png", bg = "transparent", width = 480, height = 300)
+
+plot(reg1$fitted.values,reg1$residuals,col="#598f69",pch=16 , cex=1.3)
+lines(lowess(reg1$fitted.values,reg1$residuals), col = "#c8af41")
+abline(h=0, lty = 2, col = "#d3c691")
+
+dev.off()
+```
+
+```{r}
+plot(reg1, which=4)
+png("cook's_distance.png", bg = "transparent", width = 480, height = 300)
+plot(reg1, which=4)
+dev.off()
+```
+
+```{r}
+air[c(5157,12801),]
+```
+
+```{r}
+air$estimated_e = predict(reg1)
+air$wt = 1/air$estimated_e^2
+reg2 = lm(tr_PM2.5~Ozone+NO2+CO,weights = wt, air)
+summary(reg2)
+```
+
+```{r}
+plot(reg2)
+```
+
+```{r}
+library(leaps)
+air$sCO = scale(air$CO,scale=F)
+air$sNO2 = scale(air$NO2,scale=F)
+air$sOzone = scale(air$Ozone,scale=F)
+air$sCOCO = air$sCO*air$sCO
+air$sNO2NO2 = air$sNO2*air$sNO2
+air$sOzoneOzone = air$sOzone*air$sOzone
+air$sCONO2 = air$sCO*air$sNO2
+air$sCOOzone = air$sCO*air$sOzone
+air$sNO2Ozone = air$sNO2*air$sOzone
+predictors = air[,c("sCO","sNO2","sOzone","sCOCO","sNO2NO2","sOzoneOzone","sCONO2","sCOOzone","sNO2Ozone")]
+response = air$tr_PM2.5
+leapSet = leaps(x=predictors, y=response)
+head(sort(leapSet$Cp), 3)
+leapSet$which[head(order(leapSet$Cp), 3),]
+```
+
+```{r}
+reg2 = lm(tr_PM2.5~sCO+sNO2+sOzone+sCOCO+sNO2NO2+sOzoneOzone+sCONO2+sCOOzone+sNO2Ozone,air)
+summary(reg2)
+```
+
+```{r}
+plot(reg2)
+```
+
+```{r}
+# Load the rpart package
+library(rpart)
+library(rpart.plot)
+
+air1 = air[,c("PM2.5.Cat","PM2.5","Ozone","NO2","CO")]
+air1$PM2.5 = scale(air1$PM2.5)
+air1$Ozone = scale(air1$Ozone)
+air1$NO2 = scale(air1$NO2)
+air1$CO = scale(air1$CO)
+
+# Fit a decision tree regression model
+minsplit = 20
+model <- rpart(PM2.5~Ozone+NO2+CO,air1)
+
+# Print the decision tree model
+print(model)
+rpart.plot(model, box.palette = c("#468358", "#559f55", "#83c46e","#d3c691","#c8af41","#be9a00"))
+```
+
+```{r}
+library(caret)
+set.seed(2023)
+trainRowNumbers <- createDataPartition(air$PM2.5.Cat, p=0.8, list=FALSE)
+train <- air[trainRowNumbers,]
+test <- air[-trainRowNumbers,]
+```
+
+```{r}
+library(rpart)
+library(rpart.plot)
+model1 <- rpart(PM2.5.Cat~Ozone+NO2+CO,train, method = "class")
+
+# Print the decision tree model
+print(model1)
+rpart.plot(model1, box.palette = list("#559f55", "#d3c691","#c8af41","#be9a00"))
+
+png("Decision_tree.png", bg = "transparent", width = 600, height = 600)
+rpart.plot(model1, box.palette = list("#559f55", "#d3c691","#c8af41","#be9a00"))
+dev.off()
+```
+
+```{r}
+PredictCART_train = predict(model1, data = train, type = "class")
+table(train$AQI.Cat, PredictCART_train)[1:6,c(1,3,4)]
+sum(diag(table(train$AQI.Cat, PredictCART_train)[1:6,c(1,3,4)]))/sum(table(train$AQI.Cat, PredictCART_train)[1:6,c(1,3,4)])
+```
+
+```{r}
+PredictCART = predict(model1, newdata = test, type = "class")
+table(test$AQI.Cat, PredictCART)[1:6,c(1,3,4)]
+sum(diag(table(test$AQI.Cat, PredictCART)[1:6,c(1,3,4)]))/sum(table(test$AQI.Cat, PredictCART)[1:6,c(1,3,4)])
+```
+
+```{r}
+reg = c()
+fit1 = summary(lm(tr_PM2.5~Ozone+NO2+CO,air[air$AQI.Cat==1,]))
+fit2 = summary(lm(tr_PM2.5~Ozone+NO2+CO,air[air$AQI.Cat==2,]))
+fit3 = summary(lm(tr_PM2.5~Ozone+NO2+CO,air[air$AQI.Cat==3,]))
+fit4 = summary(lm(tr_PM2.5~Ozone+NO2+CO,air[air$AQI.Cat==4,]))
+fit5 = summary(lm(tr_PM2.5~Ozone+NO2+CO,air[air$AQI.Cat==5,]))
+fit6 = summary(lm(tr_PM2.5~Ozone+NO2+CO,air[air$AQI.Cat==6,]))
+```
+
+```{r}
+fit1
+fit2
+fit3
+fit4
+fit5
+fit6
+```
+
+# Pair-wise Comparison
+
+```{r}
+LargeSample = function(data1,data2) {
+  n1 = dim(data1)[1]
+  n2 = dim(data2)[1]
+  p = dim(data2)[2]
+  X1 = as.matrix(colMeans(data1))
+  X2 = as.matrix(colMeans(data2))
+  S1 = var(data1)
+  S2 = var(data2)
+  S = S1/n1+S2/n2
+  T2 = t(X1-X2) %*% solve(S) %*% (X1-X2) # H0: \mu1-\mu2=0
+  alpha = 0.05; c_chisq = qchisq(1-alpha,p) ## cutting point at level 1-alpha for H0
+  return(T2 > c_chisq)
+}
+```
+
+```{r}
+LargeSample(air[air$AQI.Cat==1,c("CO","NO2")],air[air$AQI.Cat==2,c("CO","NO2")])
+```
+
+```{r}
+mod1 <- aov(CO ~ 0 + AQI.Cat, data = air)
+mod1.Tukey <- TukeyHSD (mod1, conf.level = 0.95)
+plot(mod1.Tukey, sub="Tukey Honest Significant Differences")
+png("TukeyHSD-CO.png", bg = "transparent", width = 480, height = 250)
+plot(mod1.Tukey, sub="Tukey Honest Significant Differences")
+dev.off()
+```
+
+```{r}
+mod1 <- aov(NO2 ~ 0 + AQI.Cat, data = air)
+mod1.Tukey <- TukeyHSD (mod1, conf.level = 0.95)
+plot(mod1.Tukey, sub="Tukey Honest Significant Differences")
+png("TukeyHSD-NO2.png", bg = "transparent", width = 480, height = 250)
+plot(mod1.Tukey, sub="Tukey Honest Significant Differences")
+dev.off()
+```
+
+```{r}
+mod1 <- aov(Ozone ~ 0 + AQI.Cat, data = air)
+mod1.Tukey <- TukeyHSD (mod1, conf.level = 0.95)
+plot(mod1.Tukey, sub="Tukey Honest Significant Differences")
+png("TukeyHSD-Ozone.png", bg = "transparent", width = 480, height = 250)
+plot(mod1.Tukey, sub="Tukey Honest Significant Differences")
+dev.off()
+```
+
+```{r}
+mod1 <- aov(PM2.5 ~ 0 + AQI.Cat, data = air)
+mod1.Tukey <- TukeyHSD (mod1, conf.level = 0.95)
+plot(mod1.Tukey, sub="Tukey Honest Significant Differences")
+```
